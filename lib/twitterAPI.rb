@@ -14,10 +14,12 @@ class TwitterAPI
     @client = client
   end
 
-  def search(keyword, sample_size=10, verbose=false)
+  def search(keyword, sample_size=20)
+    result = []
     @client.search(keyword, result_type: "recent").take(sample_size).collect do |tweet|
-      "#{tweet.user.screen_name}: #{tweet.text}"
+      result << tweet.text
     end
+    result
   end
 
 

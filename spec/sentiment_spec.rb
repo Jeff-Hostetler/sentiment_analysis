@@ -1,5 +1,13 @@
-# require 'sentiment'
-#
-# it "analyses the amount of tweets passed into tweet search" do
-#     expect(true).to eq(true)
-# end
+require 'sentiment'
+
+describe Sentiment do
+
+  describe "#new" do
+    it "creates a Sentiment object" do
+      sentiment = Sentiment.new 
+      expect(sentiment.class).to eq(Sentiment)
+    end
+  end
+
+
+end
