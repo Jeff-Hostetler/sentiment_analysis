@@ -4,4 +4,6 @@
 
 3. Unfortunately, I do not know how to use rspec with the OptionParser class. As a junior dev, one reason I want to work at a place like Foraker is learning how to write the best code, including implementing better testing. I test drive in Rails, I swear. I didn't want to ask instructors how as this is my personal assessment
 
-4. I split the input/output portion of the sentiment class into the print method. This was so that in the future when this is a rails app, the run_sentiment method runs on its own/ inputs will be entered from other areas other than command line. 
+4. I split the input/output portion of the sentiment class into the print method. This was so that in the future when this is a rails app, the run_sentiment method runs on its own/ inputs will be entered from other areas other than command line.
+
+5. Now run with 'ruby run.rb --keyword 'Justin Bieber' --sample-size 100 --verbose'

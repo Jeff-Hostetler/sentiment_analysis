@@ -19,9 +19,9 @@ class Sentiment
     sentiment_array = []
 
     tweet_array.each do |tweet|
+      positive_words = 0
+      negative_words = 0
       tweet.split.each do |word|
-        positive_words = 0
-        negative_words = 0
         dictionary_array.each do |hash|
           if hash["#{word}".downcase] !=nil
             if hash["#{word}".downcase] == "positive"
@@ -31,18 +31,21 @@ class Sentiment
             end
           end
         end
-        if positive_words > negative_words
-          positive_tweets += 1
-          sentiment_array << "positive"
-        elsif positive_words < negative_words
-          negative_tweets += 1
-          sentiment_array << "negative"
-        elsif positive_words != negative_words && 0
-          neutral_tweets +=1
-          sentiment_array << "neutral"
-        end
+      end
+      if positive_words > negative_words
+        positive_tweets += 1
+        sentiment_array << "positive"
+      elsif positive_words < negative_words
+        negative_tweets += 1
+        sentiment_array << "negative"
+      elsif (positive_words == negative_words) && (positive_words != 0)
+        neutral_tweets +=1
+        sentiment_array << "neutral"
+      else
+        sentiment_array <<"not analyzed"
       end
     end
+
     @positive_tweets = positive_tweets
     @negative_tweets = negative_tweets
     @neutral_tweets = neutral_tweets
@@ -66,7 +69,9 @@ class Sentiment
         @verbose = verbose
       end
     end.parse!
+
     self.run_sentiment
+  p  @sentiment_array.count
     puts "Keyword: #{@keyword}"
     puts "Verbosity: #{@verbose? 'on' : 'off'}"
     puts "Sample size: #{@sample_size}"
@@ -75,7 +80,7 @@ class Sentiment
       i = 0
       @tweet_array.each do |tweet|
         puts "\nTweet: #{tweet}"
-        puts sentiment_array[i]
+        puts "Sentiment: #{@sentiment_array[i]}"
         puts "-------------"
         i+=1
       end
