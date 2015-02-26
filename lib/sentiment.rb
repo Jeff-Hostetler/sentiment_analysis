@@ -11,7 +11,7 @@ class Sentiment
   def run_sentiment
     dictionary_array = Parser.new('dictionary.csv').to_array
 
-    tweet_array = TwitterAPI.new.search(@keyword, @sample_size)
+    tweet_array = TwitterAPI.new.search(keyword, sample_size)
 
     positive_tweets = 0
     negative_tweets = 0
@@ -54,6 +54,7 @@ class Sentiment
   end
 
   def print
+    @sample_size = 20
     OptionParser.new do |opts|
       opts.banner = "Usage: ruby sentiment.rb [options]"
 
@@ -70,7 +71,7 @@ class Sentiment
       end
     end.parse!
 
-    self.run_sentiment
+    self.run_sentiment()
     puts "Keyword: #{@keyword}"
     puts "Verbosity: #{@verbose? 'on' : 'off'}"
     puts "Sample size: #{@sample_size}"
