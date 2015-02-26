@@ -7,7 +7,7 @@ class Sentiment
   def initialize
   end
 
-  def parser
+  def run_sentiment
     OptionParser.new do |opts|
       opts.banner = "Usage: ruby sentiment.rb [options]"
 
