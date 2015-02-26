@@ -3,28 +3,12 @@ class Sentiment
   require_relative 'twitterAPI'
   require_relative 'parser'
 
-  attr_reader :keyword, :sample_size, :verbose
+  attr_reader :keyword, :sample_size, :verbose, :sentiment_array,
 
   def initialize
   end
 
   def run_sentiment
-    OptionParser.new do |opts|
-      opts.banner = "Usage: ruby sentiment.rb [options]"
-
-      opts.on("-k", "--keyword KEYWORD", "Keyword for Twitter search") do |keyword|
-        @keyword = keyword
-      end
-
-      opts.on("-s", "--sample-size SIZE", "The number of tweets to sample") do |size|
-        @sample_size= size.to_i
-      end
-
-      opts.on("-v", "--verbose", "Run verbosely") do |verbose|
-        @verbose = verbose
-      end
-    end.parse!
-
     dictionary_array = Parser.new('dictionary.csv').to_array
 
     tweet_array = TwitterAPI.new.search(@keyword, @sample_size)
@@ -59,14 +43,37 @@ class Sentiment
         end
       end
     end
+    @positive_tweets = positive_tweets
+    @negative_tweets = negative_tweets
+    @neutral_tweets = neutral_tweets
+    @sentiment_array = sentiment_array
+    @tweet_array = tweet_array
+  end
 
+  def print
+    OptionParser.new do |opts|
+      opts.banner = "Usage: ruby sentiment.rb [options]"
+
+      opts.on("-k", "--keyword KEYWORD", "Keyword for Twitter search") do |keyword|
+        @keyword = keyword
+      end
+
+      opts.on("-s", "--sample-size SIZE", "The number of tweets to sample") do |size|
+        @sample_size= size.to_i
+      end
+
+      opts.on("-v", "--verbose", "Run verbosely") do |verbose|
+        @verbose = verbose
+      end
+    end.parse!
+    self.run_sentiment
     puts "Keyword: #{@keyword}"
     puts "Verbosity: #{@verbose? 'on' : 'off'}"
     puts "Sample size: #{@sample_size}"
 
     if @verbose == true
       i = 0
-      tweet_array.each do |tweet|
+      @tweet_array.each do |tweet|
         puts "\nTweet: #{tweet}"
         puts sentiment_array[i]
         puts "-------------"
@@ -74,10 +81,10 @@ class Sentiment
       end
     end
 
-    puts "\nAnalyzed: #{positive_tweets + negative_tweets + neutral_tweets} Tweets"
-    puts "Positive: #{positive_tweets}"
-    puts "Negative: #{negative_tweets}"
-    puts "Neutral: #{neutral_tweets}"
+    puts "\nAnalyzed: #{@positive_tweets + @negative_tweets + @neutral_tweets} Tweets"
+    puts "Positive: #{@positive_tweets}"
+    puts "Negative: #{@negative_tweets}"
+    puts "Neutral: #{@neutral_tweets}"
   end
 
 end
