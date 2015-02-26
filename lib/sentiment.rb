@@ -1,6 +1,7 @@
 class Sentiment
   require 'optparse'
   require_relative 'twitterAPI'
+  require_relative 'parser'
 
   attr_reader :keyword, :sample_size, :verbose
 
@@ -24,24 +25,59 @@ class Sentiment
       end
     end.parse!
 
+    dictionary_array = Parser.new('dictionary.csv').to_array
+
     tweet_array = TwitterAPI.new.search(@keyword, @sample_size)
+
+    positive_tweets = 0
+    negative_tweets = 0
+    neutral_tweets = 0
+    sentiment_array = []
+
+    tweet_array.each do |tweet|
+      tweet.split.each do |word|
+        positive_words = 0
+        negative_words = 0
+        dictionary_array.each do |hash|
+          if hash["#{word}".downcase] !=nil
+            if hash["#{word}".downcase] == "positive"
+              positive_words += 1
+            else
+              negative_words += 1
+            end
+          end
+        end
+        if positive_words > negative_words
+          positive_tweets += 1
+          sentiment_array << "positive"
+        elsif positive_words < negative_words
+          negative_tweets += 1
+          sentiment_array << "negative"
+        elsif positive_words != negative_words && 0
+          neutral_tweets +=1
+          sentiment_array << "neutral"
+        end
+      end
+    end
 
     puts "Keyword: #{@keyword}"
     puts "Verbosity: #{@verbose? 'on' : 'off'}"
     puts "Sample size: #{@sample_size}"
 
     if @verbose == true
+      i = 0
       tweet_array.each do |tweet|
-        puts "Tweet: #{tweet}"
-        puts "Negative/Positive"
+        puts "\nTweet: #{tweet}"
+        puts sentiment_array[i]
         puts "-------------"
+        i+=1
       end
     end
 
-    puts "\nAnalyzed: 0 Tweets"
-    puts "Positive: 0"
-    puts "Negative: 0"
-    puts "Neutral: 0"
+    puts "\nAnalyzed: #{positive_tweets + negative_tweets + neutral_tweets} Tweets"
+    puts "Positive: #{positive_tweets}"
+    puts "Negative: #{negative_tweets}"
+    puts "Neutral: #{neutral_tweets}"
   end
 
 end

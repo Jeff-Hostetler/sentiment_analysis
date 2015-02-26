@@ -1,10 +1,6 @@
 require 'parser'
-require 'csv'
-require 'open-uri'
 
 describe Parser do
-
-
 
   describe "new" do
     it "returns a Parser object" do
