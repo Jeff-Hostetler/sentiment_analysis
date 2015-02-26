@@ -71,7 +71,6 @@ class Sentiment
     end.parse!
 
     self.run_sentiment
-  p  @sentiment_array.count
     puts "Keyword: #{@keyword}"
     puts "Verbosity: #{@verbose? 'on' : 'off'}"
     puts "Sample size: #{@sample_size}"
